@@ -40,10 +40,11 @@ class Input(object):
         X_times = []
         y_transaction = self.output_onehot(transactions, transactions_original, values=['Alquiler', 'Metropolitan', 'Adeslas', 'Nomina'])
         y_weekday = self.output_onehot(dates[:,3], dates[:,3], values=range(7))
+        y_day = self.output_onehot(dates[:,2], dates[:,2], values=range(31))
         for i in range(last_action-self.input_steps):
             X_transactions.append(transactions[i:i+self.input_steps])
             X_times.append(dates[i:i+self.input_steps])
-        return X_transactions, X_times, y_transaction, y_weekday
+        return X_transactions, X_times, y_transaction, y_weekday, y_day
 
     def output_onehot(self, transactions, transactions_original, values):
         last_action = len(transactions) - 1

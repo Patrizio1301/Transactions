@@ -34,16 +34,19 @@ class Input(object):
         # return actions_by_index.reshape([-1, 1])
         return actions_by_index
 
-    def timeseries(self, dates, transactions, transactions_original):
+    def timeseries(self, dates, transactions, transactions_original, amount):
         last_action = len(transactions) - 1
         X_transactions = []
         X_times = []
+        x_amount = []
         y_transaction = self.output_onehot(transactions, transactions_original, values=['Alquiler', 'Metropolitan', 'Adeslas', 'Nomina'])
         y_weekday = self.output_onehot(dates[:,3], dates[:,3], values=range(7))
+        y_day = self.output_onehot(dates[:,2], dates[:,2], values=range(31))
         for i in range(last_action-self.input_steps):
             X_transactions.append(transactions[i:i+self.input_steps])
+            x_amount.append(amount[i:i+self.input_steps])
             X_times.append(dates[i:i+self.input_steps])
-        return X_transactions, X_times, y_transaction, y_weekday
+        return X_transactions, X_times, x_amount, y_transaction, y_weekday, y_day, amount[self.input_steps+1:]
 
     def output_onehot(self, transactions, transactions_original, values):
         last_action = len(transactions) - 1
@@ -59,4 +62,4 @@ class Input(object):
         df['date'] = pd.to_datetime(df['date'], errors='coerce')
         dates = self.date_handling(df["date"])
         transactions = self.transaction_handling(df)
-        return self.timeseries(dates, transactions, df['transaction'].values.tolist())
+        return self.timeseries(dates, transactions, df['transaction'].values.tolist(), df['amount'].values.tolist())

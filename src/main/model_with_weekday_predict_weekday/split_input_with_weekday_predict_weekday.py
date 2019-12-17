@@ -6,7 +6,7 @@ def data_split(total_actions,
                X_transactions,
                X_times,
                y,
-               y_weekday=None):
+               y_weekday):
     #divide the examples in training and validation
     total_examples = len(X_transactions)
     test_per = 0.3
@@ -17,6 +17,8 @@ def data_split(total_actions,
     x_times_test = X_times[:limit]
     y_train = y[limit:]
     y_test = y[:limit]
+    y_weekday_train = y_weekday[limit:]
+    y_weekday_test = y_weekday[:limit]
     print('Different actions:', total_actions)
     print('Total examples:', total_examples)
     print('Train examples:', len(x_actions_train), len(y_train))
@@ -25,11 +27,13 @@ def data_split(total_actions,
     x_train = np.array(x_actions_train)
     x_times_train = np.array(x_times_train)
     y_train = np.array(y_train)
+    y_weekday_train = np.array(y_weekday_train)
     x_test = np.array(x_actions_test)
     x_times_test = np.array(x_times_test)
     y_test = np.array(y_test)
+    y_weekday_test = np.array(y_weekday_test)
     print('Shape (X,y):')
     print(x_train.shape)
     print(x_times_train[:,:,1].shape)
     print(y_train.shape)
-    return x_train, x_times_train, y_train, x_test, x_times_test, y_test
+    return x_train, x_times_train, y_train, y_weekday_train, x_test, x_times_test, y_test, y_weekday_test

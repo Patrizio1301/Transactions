@@ -61,7 +61,6 @@ history: training history to be visualized
 def plot_training_info(metrics, save, history):
     # summarize history for accuracy
     if 'acc' in metrics:
-
         pltp.plot(history['acc'])
         pltp.plot(history['val_acc'])
         pltp.title('model accuracy')
@@ -86,6 +85,32 @@ def plot_training_info(metrics, save, history):
         pltp.legend(['train', 'test'], loc='upper left')
         if save == True:
             pltp.savefig('loss.eps')
+            pltp.gcf().clear()
+        else:
+            pltp.show()
+
+    if 'output_weekday_acc' in metrics:
+            pltp.plot(history['output_weekday_acc'])
+            pltp.plot(history['val_output_weekday_acc'])
+            pltp.title('model accuracy')
+            pltp.ylabel('accuracy')
+            pltp.xlabel('epoch')
+            pltp.legend(['train', 'test'], loc='upper left')
+            if save == True:
+                pltp.savefig('output_weekday_acc.eps')
+                pltp.gcf().clear()
+            else:
+                pltp.show()
+
+    if 'output_transaction_acc' in metrics:
+        pltp.plot(history['output_transaction_acc'])
+        pltp.plot(history['val_output_transaction_acc'])
+        pltp.title('model accuracy')
+        pltp.ylabel('accuracy')
+        pltp.xlabel('epoch')
+        pltp.legend(['train', 'test'], loc='upper left')
+        if save == True:
+            pltp.savefig('output_transaction_acc.eps')
             pltp.gcf().clear()
         else:
             pltp.show()

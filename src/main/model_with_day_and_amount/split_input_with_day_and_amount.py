@@ -5,18 +5,30 @@ import sys
 def data_split(total_actions,
                X_transactions,
                X_times,
+               x_amount,
                y,
-               y_weekday=None):
+               y_weekday,
+               y_day,
+               y_amount):
     #divide the examples in training and validation
     total_examples = len(X_transactions)
     test_per = 0.3
     limit = int(test_per * total_examples)
     x_actions_train = X_transactions[limit:]
     x_times_train = X_times[limit:]
+    x_amount_train = x_amount[limit:]
+
     x_actions_test = X_transactions[:limit]
     x_times_test = X_times[:limit]
+    x_amount_test = x_amount[:limit]
     y_train = y[limit:]
     y_test = y[:limit]
+    y_weekday_train = y_weekday[limit:]
+    y_weekday_test = y_weekday[:limit]
+    y_day_train = y_day[limit:]
+    y_day_test = y_day[:limit]
+    y_amount_train = y_amount[limit:]
+    y_amount_test = y_amount[:limit]
     print('Different actions:', total_actions)
     print('Total examples:', total_examples)
     print('Train examples:', len(x_actions_train), len(y_train))
@@ -24,12 +36,20 @@ def data_split(total_actions,
     sys.stdout.flush()
     x_train = np.array(x_actions_train)
     x_times_train = np.array(x_times_train)
+    x_amount_train = np.array(x_amount_train)
     y_train = np.array(y_train)
+    y_weekday_train = np.array(y_weekday_train)
+    y_day_train = np.array(y_day_train)
+    y_amount_train = np.array(y_amount_train)
     x_test = np.array(x_actions_test)
     x_times_test = np.array(x_times_test)
+    x_amount_test = np.array(x_amount_test)
     y_test = np.array(y_test)
+    y_weekday_test = np.array(y_weekday_test)
+    y_day_test = np.array(y_day_test)
+    y_amount_test = np.array(y_amount_test)
     print('Shape (X,y):')
     print(x_train.shape)
     print(x_times_train[:,:,1].shape)
     print(y_train.shape)
-    return x_train, x_times_train, y_train, x_test, x_times_test, y_test
+    return x_train, x_times_train, x_amount_train, y_train, y_weekday_train, y_day_train, y_amount_train, x_test, x_times_test, x_amount_test, y_test, y_weekday_test, y_day_test, y_amount_test

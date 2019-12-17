@@ -29,7 +29,7 @@ def training(model,
     print('Training model...')
     sys.stdout.flush()
     checkpoint = tf.keras.callbacks.ModelCheckpoint(filepath='weights.{epoch:02d}-{val_loss:.2f}.hdf5',
-                                                    monitor='val_acc',
+                                                    monitor='val_accurracy',
                                                     verbose=0,
                                                     save_weights_only=False)
 
@@ -44,7 +44,7 @@ def training(model,
     print('*' * 20)
     print('Plotting history...')
     sys.stdout.flush()
-    plot_training_info(['accuracy', 'loss'], True, history.history)
+    plot_training_info(['output_transaction_acc', 'output_weekday_acc', 'loss'], True, history.history)
     print('*' * 20)
     print('Evaluating best model...')
     sys.stdout.flush()
@@ -52,22 +52,8 @@ def training(model,
     print(metrics)
 
     predictions = model.predict(input_test, batch_size)
-    y_ = predictions.argmax(axis=-1)
-    correct = [0] * input_steps
-    prediction_range = input_steps
-    for i, prediction in enumerate(predictions):
-        correct_answer = output_test[i].tolist().index(1)
-        best_n = np.sort(prediction)[::-1][:prediction_range]
-        for j in range(prediction_range):
-            if prediction.tolist().index(best_n[j]) == correct_answer:
-                for k in range(j, prediction_range):
-                    correct[k] += 1
+    y_transactions = predictions[0].argmax(axis=-1)
+    y_weekday = predictions[1].argmax(axis=-1)
 
-    accuracies = []
-    for i in range(prediction_range):
-        print('%s prediction accuracy: %s' % (i+1, (correct[i] * 1.0) / len(output_test)))
-        accuracies.append((correct[i] * 1.0) / len(output_test))
-
-    print(accuracies)
 
     print('************ FIN ************\n' * 3)
